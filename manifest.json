@@ -2,5 +2,15 @@
   "name": "ScheduRater",
   "version": "1.0",
   "description": "ScheduRater chrome extension",
-  "manifest_version": 2
+  "manifest_version": 2,
+  "content_scripts": [
+    {
+      "matches": [
+        "https://umich.collegescheduler.com/terms/*/schedules/*"
+      ],
+      "js": [
+        "schedurater.js"
+      ]
+    }
+  ]
 }
