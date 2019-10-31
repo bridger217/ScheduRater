@@ -12,5 +12,8 @@
         "schedurater.js"
       ]
     }
+  ],
+  "web_accessible_resources":[
+    "iframe.html"
   ]
 }

@@ -40,7 +40,12 @@ async function correctURL(){
     }
   }
   console.log(profs);
-  alert("got profs");
+
+
+  var ifrm = document.createElement('iframe');
+  ifrm.setAttribute('id', 'ifrm');
+  ifrm.src = chrome.runtime.getURL('iframe.html');
+  document.body.appendChild(ifrm);
 }
 
 correctURL();
