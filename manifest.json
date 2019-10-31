@@ -6,7 +6,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://umich.collegescheduler.com/terms/*/schedules/*"
+        "https://umich.collegescheduler.com/*"
       ],
       "js": [
         "schedurater.js"
