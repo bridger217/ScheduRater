@@ -6,6 +6,12 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
+
+
+
+
+
 async function correctURL(){
   while(!document.URL.includes("schedules/")){
     console.log(window.location.href);
@@ -32,7 +38,9 @@ async function correctURL(){
             break
           }
         }
-        var prof = child.children[c].children[0].children[1].innerHTML;
+        var prof = child.children[c].children[0].children[1].innerText;
+        child.children[c].children[0].children[1].innerText = "Mitch sucks";
+        //split professors on commas for multi
 
         profs.add(prof.trim());
       }
@@ -41,6 +49,22 @@ async function correctURL(){
   }
   console.log(profs);
 
+  const Http = new XMLHttpRequest();
+
+  var arr_profs = Array.from(profs);
+  console.log(arr_profs);
+  console.log(arr_profs.length);
+  for (var p = 0; p < arr_profs.length; p++){
+    var search = "https://www.ratemyprofessors.com/search.jsp?query=";
+    search += arr_profs[p].replace(" ","+");
+    console.log(search);
+    Http.open("GET", search);
+    Http.send();
+
+    Http.onreadystatechange = (e) => {
+      console.log(Http.responseText);
+    }
+  }
 
   var ifrm = document.createElement('iframe');
   ifrm.setAttribute('id', 'ifrm');

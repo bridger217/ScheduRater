@@ -15,5 +15,8 @@
   ],
   "web_accessible_resources":[
     "iframe.html"
+  ],
+  "permissions": [
+    "https://www.ratemyprofessors.com/"
   ]
 }
