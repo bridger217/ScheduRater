@@ -6,11 +6,11 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
-
-
-
-
+// String prototype to replace all occurences, not just the first
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
 
 async function correctURL(){
   while(!document.URL.includes("schedules/")){
@@ -56,7 +56,7 @@ async function correctURL(){
   console.log(arr_profs.length);
   for (var p = 0; p < arr_profs.length; p++){
     var search = "https://www.ratemyprofessors.com/search.jsp?query=";
-    search += arr_profs[p].replace(" ","+");
+    search += arr_profs[p].replaceAll(" ","+");
     console.log(search);
     Http.open("GET", search);
     Http.send();
@@ -73,8 +73,3 @@ async function correctURL(){
 }
 
 correctURL();
-
-
-
-
-
