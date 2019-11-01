@@ -6,6 +6,19 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// function make(prof){
+//
+// }
+
+function setDisplayVisible(id){
+  console.log(id);
+  document.getElementById(id).style.display = "block";
+}
+
+function setDisplayHidden(id){
+  console.log(id);
+  document.getElementById(id).style.display = "hidden";
+}
 
 
 
@@ -18,8 +31,6 @@ async function correctURL(){
     await sleep(5000);
   }
 
-  alert("on schedule page");
-
   var container_class = "row week-spanning row-no-padding row-no-margin";
 
   var container = document.getElementsByClassName(container_class);
@@ -31,20 +42,30 @@ async function correctURL(){
     for (var i = 1; i < container[0].children.length; i++){
       for (var j = 0; j < container[0].children[i].children.length; j++){
         var child = container[0].children[i].children[j].children[1].children[1];
-        //they were assholes and put child nodes in different locations in the DOM
         for (var c = 0; c < child.children.length; c++){
           if (child.children[c].className === "meeting-text"){
-            console.log(c)
             break
           }
         }
         var prof = child.children[c].children[0].children[1].innerText;
-        child.children[c].children[0].children[1].innerText = "Mitch sucks";
-        //split professors on commas for multi
 
+        var newDiv = document.createElement("div");
+        var id  = i.toString() + j.toString();
+
+        newDiv.id = id;
+        newDiv.style.width = "100px";
+        newDiv.style.height = "100px";
+        newDiv.style.background = "red";
+        newDiv.style.display = "none";
+        container[0].children[i].children[j].appendChild(newDiv);
+        container[0].children[i].children[j].addEventListener("mouseover", function(){
+          newDiv.style.display = "block";
+        });
+        container[0].children[i].children[j].addEventListener("mouseout", function(){
+          newDiv.style.display = "none";
+        });
         profs.add(prof.trim());
       }
-
     }
   }
   console.log(profs);
