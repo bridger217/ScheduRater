@@ -22,5 +22,12 @@
   "permissions": [
     "http://www.ratemyprofessors.com/",
     "https://www.ratemyprofessors.com/"
-  ]
+  ],
+  "icons": {
+    "128": "icon.png"
+  },
+  "broswer_action": {
+    "default_icon": "icon.png"
+  }
+
 }
