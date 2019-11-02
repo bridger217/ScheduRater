@@ -8,12 +8,6 @@ class ProfRating {
   }
 }
 
-// String prototype to replace all occurences, not just the first
-String.prototype.replaceAll = function(search, replacement) {
-    var target = this;
-    return target.replace(new RegExp(search, 'g'), replacement);
-};
-
 // function make(prof){
 //
 // }
@@ -83,21 +77,23 @@ async function correctURL(){
   console.log(arr_profs);
   console.log(arr_profs.length);
   for (var p = 0; p < arr_profs.length; p++){
-    var search = "https://www.ratemyprofessors.com/search.jsp?query=";
-    search += arr_profs[p].replaceAll(" ","+");
+    chrome.runtime.sendMessage(
+    {contentScriptQuery: "queryRatings", profName: arr_profs[p]});
+    // var search = "https://www.ratemyprofessors.com/search.jsp?query=";
+    // search += arr_profs[p].replaceAll(" ","+");
 
-    console.log(search);
-    Http.open("GET", search);
-    Http.send();
-
-    Http.onreadystatechange = (e) => {
-      console.log(Http.responseText);
-      var dummyDOM = document.createElement("html");
-      dummyDOM.innerHTML = Http;
-      console.log(document.getElementsByTagName('*').length);
-      const listings = document.getElementsByClassName("listing PROFESSOR");
-      for (let l of listings) { console.log(l.listing-name.main); }
-    }
+    // console.log(search);
+    // Http.open("GET", search);
+    // Http.send();
+    //
+    // Http.onreadystatechange = (e) => {
+    //   console.log(Http.responseText);
+    //   var dummyDOM = document.createElement("html");
+    //   dummyDOM.innerHTML = Http;
+    //   console.log(document.getElementsByTagName('*').length);
+    //   const listings = document.getElementsByClassName("listing PROFESSOR");
+    //   for (let l of listings) { console.log(l.listing-name.main); }
+    // }
   }
 
   let ifrm = document.createElement('iframe');
