@@ -4,7 +4,7 @@
   "description": "ScheduRater chrome extension",
   "manifest_version": 2,
   "background": {
-    "scripts": ["rmp_query.js"]
+    "scripts": ["rmp_query.js", "jquery-3.4.1.min.js"]
   },
   "content_scripts": [
     {

@@ -1,13 +1,6 @@
 //schedurater.js
 // jalgrana-mitchhub-elbridge
 
-class ProfRating {
-  constructor(score, tags) {
-    this.score = score;
-    this.tage = tags;
-  }
-}
-
 // function make(prof){
 //
 // }
@@ -69,31 +62,17 @@ async function correctURL(){
       }
     }
   }
+  
   console.log(profs);
-
-  const Http = new XMLHttpRequest();
-
   let arr_profs = Array.from(profs);
   console.log(arr_profs);
   console.log(arr_profs.length);
+
   for (var p = 0; p < arr_profs.length; p++){
+    // For each professor, send the background script a request
+    // that will be forwarded to RMP
     chrome.runtime.sendMessage(
     {contentScriptQuery: "queryRatings", profName: arr_profs[p]});
-    // var search = "https://www.ratemyprofessors.com/search.jsp?query=";
-    // search += arr_profs[p].replaceAll(" ","+");
-
-    // console.log(search);
-    // Http.open("GET", search);
-    // Http.send();
-    //
-    // Http.onreadystatechange = (e) => {
-    //   console.log(Http.responseText);
-    //   var dummyDOM = document.createElement("html");
-    //   dummyDOM.innerHTML = Http;
-    //   console.log(document.getElementsByTagName('*').length);
-    //   const listings = document.getElementsByClassName("listing PROFESSOR");
-    //   for (let l of listings) { console.log(l.listing-name.main); }
-    // }
   }
 
   let ifrm = document.createElement('iframe');

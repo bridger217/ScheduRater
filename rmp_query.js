@@ -4,27 +4,63 @@ String.prototype.replaceAll = function(search, replacement) {
     return target.replace(new RegExp(search, 'g'), replacement);
 };
 
-// function parseRatings(rmpHTML) {
-//   listings = getElementsbyClassName("listings");
-//   console.log("listings: " + listings.length);
-//   for (var l in listings) {
-//     alert(l.listing-name.main);
-//   }
-// }
+function handleHttpErrors(response) {
+    if (!response.ok) {
+      throw Error(response.statusText);
+    }
+    return response;
+}
+
+function handleRatingsResponse(ratingsPageHTML) {
+  var ratingsPageDOM = $($.parseHTML(ratingsPageHTML));
+  var rating = $(".grade", ratingsPageDOM).text().substring(0, 4);
+  alert(rating);
+}
+
+function searchForRatings(url) {
+  fetch(url)
+    .then(response => handleHttpErrors(response))
+    .then(response => response.text())
+    .then(text => handleRatingsResponse(text))
+    .catch(error => console.log(error))
+
+  return true;
+}
+
+function handleQueryResponse(searchPageHTML) {
+  var searchPageDOM = $($.parseHTML(searchPageHTML));
+  var profListings = $("li.listing.PROFESSOR", searchPageDOM);
+
+  if (profListings.length == 0) {
+    throw Error("No professors found.");
+  }
+
+  // for now, just use the first prof as the correct one
+  var firstProfLink =
+    "https://www.ratemyprofessors.com" + $("a", profListings[0]).attr("href");
+
+  // grab the html for this professor's ranking page
+  searchForRatings(firstProfLink);
+
+
+}
 
 // Listen for the content script to make a rmp request
 chrome.runtime.onMessage.addListener(
   function(request) {
-    alert(request.contentScriptQuery);
     if (request.contentScriptQuery == "queryRatings") {
-      alert(request.profName);
-      // var url = "https://www.ratemyprofessors.com/search.jsp?query=" +
-      //         request.profName.reaplaceAll(" ", "+");
-      // fetch(url)
-      //     .then(response => response.text())
-      //     .then(text => parseRatings(text))
-      //     .then(price => sendResponse(price))
-      //     .catch(error => ...)
+      var url =
+      `https://www.ratemyprofessors.com/search.jsp?queryoption=HEADER&queryBy=t
+      eacherName&schoolName=University+of+Michigan&schoolID=1258&query=`
+      + request.profName.replaceAll(" ", "+");
+
+      fetch(url)
+          .then(response => handleHttpErrors(response))
+          .then(response => response.text())
+          .then(text => handleQueryResponse(text))
+          // .then(price => sendResponse(price))
+          .catch(error => console.log(error))
+
       return true;  // Will respond asynchronously.
     }
   });
