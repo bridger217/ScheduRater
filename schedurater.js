@@ -8,10 +8,6 @@ class ProfRating {
   }
 }
 
-// function make(prof){
-//
-// }
-
 let profsToDiv = {};
 
 function sleep(ms) {
@@ -27,7 +23,7 @@ function setDisplayHidden(id){
   document.getElementById(id).style.display = "none";
 }
 
-function getProfsAndDivs(){
+function getProfsAndCreateDivs(){
   let container_class = "row week-spanning row-no-padding row-no-margin";
   let container = document.getElementsByClassName(container_class);
   let profs = new Set();
@@ -42,8 +38,6 @@ function getProfsAndDivs(){
             break
           }
         }
-
-
 
         let newDiv = document.createElement("div");
         let id  = i.toString() + j.toString();
@@ -84,7 +78,7 @@ async function run(){
     await sleep(1000);
   }
 
-  let profs = getProfsAndDivs();
+  let profs = getProfsAndCreateDivs();
 
 
   console.log(profs);
@@ -92,8 +86,6 @@ async function run(){
   const Http = new XMLHttpRequest();
 
   let arr_profs = Array.from(profs);
-  console.log(arr_profs);
-  console.log(arr_profs.length);
   for (var p = 0; p < arr_profs.length; p++){
     chrome.runtime.sendMessage(
     {contentScriptQuery: "queryRatings", profName: arr_profs[p]});
