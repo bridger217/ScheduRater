@@ -29,8 +29,7 @@ function addProfRating(rating, profName){
 }
 
 function clean(){
-  // console.log("cleaning");
-  // for (var index in )
+  profsToDiv = {};
 }
 
 
@@ -54,7 +53,7 @@ function getProfsAndCreateDivs(){
         let id  = i.toString() + j.toString();
 
         newDiv.id = id;
-        newDiv.className = "profRating";
+        newDiv.className = "profDiv";
         newDiv.style.width = "inherit";
         newDiv.style.height = "200px";
         newDiv.style.background = "#3BB6B4";
@@ -80,7 +79,6 @@ function getProfsAndCreateDivs(){
       }
     }
   }
-  console.log(profsToDiv);
   return profs;
 }
 
@@ -89,19 +87,21 @@ async function run(){
   //   console.log(window.location.href);
   //   await sleep(1000);
   // }
-
   let profs = getProfsAndCreateDivs();
 
 
-  console.log(profs);
   let arr_profs = Array.from(profs);
   for (var p = 0; p < arr_profs.length; p++){
     // For each professor, send the background script a request
     // that will be forwarded to RMP
-    console.log("sending message");
     chrome.runtime.sendMessage(
-    {contentScriptQuery: "queryRatings", profName: arr_profs[p]});
+      {
+      contentScriptQuery: "queryRatings",
+      profName: arr_profs[p]
+      }
+    );
   }
+
 }
 
 async function checkGoBack(){
@@ -114,7 +114,7 @@ async function checkGoBack(){
       }
     }
     prevURL = document.URL;
-    await sleep(2000);
+    await sleep(500);
 
   }
 }
