@@ -19,18 +19,20 @@ function setDisplayVisible(id){
 }
 
 function setDisplayHidden(id){
-  console.log(id);
   document.getElementById(id).style.display = "none";
 }
 
 function addProfRating(rating, profName){
-  alert(rating);
-  alert(profName);
-
   for (let i = 0; i < profsToDiv[profName].length; i++){
     $("#"+profsToDiv[profName][i]).append("<b>" + profName + ":" + "</br>" + rating + "</br>");
   }
 }
+
+function clean(){
+  // console.log("cleaning");
+  // for (var index in )
+}
+
 
 function getProfsAndCreateDivs(){
   let container_class = "row week-spanning row-no-padding row-no-margin";
@@ -52,6 +54,7 @@ function getProfsAndCreateDivs(){
         let id  = i.toString() + j.toString();
 
         newDiv.id = id;
+        newDiv.className = "profRating";
         newDiv.style.width = "inherit";
         newDiv.style.height = "200px";
         newDiv.style.background = "#3BB6B4";
@@ -82,10 +85,10 @@ function getProfsAndCreateDivs(){
 }
 
 async function run(){
-  while(!document.URL.includes("schedules/")){
-    console.log(window.location.href);
-    await sleep(1000);
-  }
+  // while(!document.URL.includes("schedules/")){
+  //   console.log(window.location.href);
+  //   await sleep(1000);
+  // }
 
   let profs = getProfsAndCreateDivs();
 
@@ -101,7 +104,20 @@ async function run(){
   }
 }
 
+async function checkGoBack(){
+  var prevURL = document.URL;
+  while(true){
+    if (prevURL !== document.URL){
+      if (document.URL.includes("schedules/")){
+        clean();
+        run();
+      }
+    }
+    prevURL = document.URL;
+    await sleep(2000);
 
+  }
+}
 
 // Listen for the content script to make a rmp request
 chrome.runtime.onMessage.addListener(
@@ -116,4 +132,4 @@ chrome.runtime.onMessage.addListener(
 
 
 
-run();
+checkGoBack();
