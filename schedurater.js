@@ -26,7 +26,10 @@ function setDisplayHidden(id){
 function addProfRating(rating, profName){
   alert(rating);
   alert(profName);
-  //document.getElementById()
+
+  for (let i = 0; i < profsToDiv[profName].length; i++){
+    $("#"+profsToDiv[profName][i]).append("<b>" + profName + ":" + "</br>" + rating + "</br>");
+  }
 }
 
 function getProfsAndCreateDivs(){
