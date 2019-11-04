@@ -23,6 +23,12 @@ function setDisplayHidden(id){
   document.getElementById(id).style.display = "none";
 }
 
+function addProfRating(rating, profName){
+  alert(rating);
+  alert(profName);
+  //document.getElementById()
+}
+
 function getProfsAndCreateDivs(){
   let container_class = "row week-spanning row-no-padding row-no-margin";
   let container = document.getElementsByClassName(container_class);
@@ -86,9 +92,25 @@ async function run(){
   for (var p = 0; p < arr_profs.length; p++){
     // For each professor, send the background script a request
     // that will be forwarded to RMP
+    console.log("sending message");
     chrome.runtime.sendMessage(
     {contentScriptQuery: "queryRatings", profName: arr_profs[p]});
   }
 }
+
+
+
+// Listen for the content script to make a rmp request
+chrome.runtime.onMessage.addListener(
+  function(request) {
+    addProfRating(request.profRating, request.profName);
+    //alert(request.profRating);
+    return true;  // Will respond asynchronously
+  }
+);
+
+
+
+
 
 run();

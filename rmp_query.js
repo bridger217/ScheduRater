@@ -11,28 +11,35 @@ function handleHttpErrors(response) {
     return response;
 }
 
-function handleRatingsResponse(ratingsPageHTML) {
+function handleRatingsResponse(ratingsPageHTML, profName) {
   var ratingsPageDOM = $($.parseHTML(ratingsPageHTML));
   var rating = $(".grade", ratingsPageDOM).text().substring(0, 4);
-  alert(rating);
+  // chrome.runtime.sendMessage(
+  //   {
+  //     contentScriptQuery: "queryRatingsReturn", profRating: rating
+  //   }
+  // );
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, {profRating: rating, profName: profName});
+  });
 }
 
-function searchForRatings(url) {
+function searchForRatings(url, profName) {
   fetch(url)
     .then(response => handleHttpErrors(response))
     .then(response => response.text())
-    .then(text => handleRatingsResponse(text))
+    .then(text => handleRatingsResponse(text, profName))
     .catch(error => console.log(error))
 
   return true;
 }
 
-function handleQueryResponse(searchPageHTML) {
+function handleQueryResponse(searchPageHTML, profName) {
   var searchPageDOM = $($.parseHTML(searchPageHTML));
   var profListings = $("li.listing.PROFESSOR", searchPageDOM);
 
   if (profListings.length == 0) {
-    throw Error("No professors found.");
+    throw Error(profName + " not found.");
   }
 
   // for now, just use the first prof as the correct one
@@ -40,7 +47,7 @@ function handleQueryResponse(searchPageHTML) {
     "https://www.ratemyprofessors.com" + $("a", profListings[0]).attr("href");
 
   // grab the html for this professor's ranking page
-  searchForRatings(firstProfLink);
+  searchForRatings(firstProfLink, profName);
 
 
 }
@@ -57,7 +64,7 @@ chrome.runtime.onMessage.addListener(
       fetch(url)
           .then(response => handleHttpErrors(response))
           .then(response => response.text())
-          .then(text => handleQueryResponse(text))
+          .then(text => handleQueryResponse(text, request.profName))
           // .then(price => sendResponse(price))
           .catch(error => console.log(error))
 
