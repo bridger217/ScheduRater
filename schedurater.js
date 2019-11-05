@@ -1,13 +1,6 @@
 //schedurater.js
 // jalgrana-mitchhub-elbridge
 
-class ProfRating {
-  constructor(score, tags) {
-    this.score = score;
-    this.tags = tags;
-  }
-}
-
 let profsToDiv = {};
 
 function sleep(ms) {
@@ -31,7 +24,6 @@ function addProfRating(rating, profName){
 function clean(){
   profsToDiv = {};
 }
-
 
 function getProfsAndCreateDivs(){
   let container_class = "row week-spanning row-no-padding row-no-margin";
@@ -83,12 +75,7 @@ function getProfsAndCreateDivs(){
 }
 
 async function run(){
-  // while(!document.URL.includes("schedules/")){
-  //   console.log(window.location.href);
-  //   await sleep(1000);
-  // }
   let profs = getProfsAndCreateDivs();
-
 
   let arr_profs = Array.from(profs);
   for (var p = 0; p < arr_profs.length; p++){
@@ -101,10 +88,17 @@ async function run(){
       }
     );
   }
-
 }
 
-async function checkGoBack(){
+// Listen for the content script to make a rmp request
+chrome.runtime.onMessage.addListener(
+  function(request) {
+    addProfRating(request.profRating, request.profName);
+    return true;  // Will respond asynchronously
+  }
+);
+
+async function main(){
   var prevURL = document.URL;
   while(true){
     if (prevURL !== document.URL){
@@ -119,17 +113,4 @@ async function checkGoBack(){
   }
 }
 
-// Listen for the content script to make a rmp request
-chrome.runtime.onMessage.addListener(
-  function(request) {
-    addProfRating(request.profRating, request.profName);
-    //alert(request.profRating);
-    return true;  // Will respond asynchronously
-  }
-);
-
-
-
-
-
-checkGoBack();
+main();
