@@ -14,11 +14,6 @@ function handleHttpErrors(response) {
 function handleRatingsResponse(ratingsPageHTML, profName) {
   var ratingsPageDOM = $($.parseHTML(ratingsPageHTML));
   var rating = $(".grade", ratingsPageDOM).text().substring(0, 4);
-  // chrome.runtime.sendMessage(
-  //   {
-  //     contentScriptQuery: "queryRatingsReturn", profRating: rating
-  //   }
-  // );
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, {profRating: rating, profName: profName});
   });
@@ -48,8 +43,6 @@ function handleQueryResponse(searchPageHTML, profName) {
 
   // grab the html for this professor's ranking page
   searchForRatings(firstProfLink, profName);
-
-
 }
 
 // Listen for the content script to make a rmp request
@@ -65,7 +58,6 @@ chrome.runtime.onMessage.addListener(
           .then(response => handleHttpErrors(response))
           .then(response => response.text())
           .then(text => handleQueryResponse(text, request.profName))
-          // .then(price => sendResponse(price))
           .catch(error => console.log(error))
 
       return true;  // Will respond asynchronously.
