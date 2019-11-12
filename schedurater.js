@@ -64,53 +64,6 @@ function getProfsAndCreateDivs(){
 
 
   });
-
-  //
-  // let container_class = "row week-spanning row-no-padding row-no-margin";
-  // let container = document.getElementsByClassName(container_class);
-  // let profs = new Set();
-  //
-  // if (container != null){
-  //   for (let i = 1; i < container[0].children.length; i++){
-  //     for (let j = 0; j < container[0].children[i].children.length; j++){
-  //       let child = container[0].children[i].children[j].children[1].children[1];
-  //       let c = 0;
-  //       for (c = 0; c < child.children.length; c++){
-  //         if (child.children[c].className === "meeting-text"){
-  //           break
-  //         }
-  //       }
-  //
-  //       let newDiv = document.createElement("div");
-  //       let id  = i.toString() + j.toString();
-  //
-  //       newDiv.id = id;
-  //       newDiv.className = "profDiv";
-  //       newDiv.style.width = "inherit";
-  //       newDiv.style.height = "200px";
-  //       newDiv.style.background = "#3BB6B4";
-  //       newDiv.style.display = "none";
-  //       newDiv.style.zIndex = "10000";
-  //       newDiv.style.position = "absolute";
-  //       container[0].children[i].children[j].appendChild(newDiv);
-  //       container[0].children[i].children[j].addEventListener("mouseenter", () => {
-  //         setDisplayVisible(id);
-  //       },false);
-        // container[0].children[i].children[j].addEventListener("mouseleave", () => {
-        //   setDisplayHidden(id);
-        // },false);
-  //
-  //       let prof = child.children[c].children[0].children[1].innerText.trim().split(",");
-  //       for (let p = 0; p < prof.length; p++){
-  //         profs.add(prof[p]);
-  //         if (!(prof[p] in profsToDiv)){
-  //           profsToDiv[prof[p]] = [];
-  //         }
-  //         profsToDiv[prof[p]].push(id);
-  //       }
-  //     }
-  //   }
-  // }
   return profs;
 }
 
