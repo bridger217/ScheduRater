@@ -8,18 +8,11 @@ function sleep(ms) {
 }
 
 function setDisplayVisible(id){
-  // document.getElementById(id).style.display = "block";
-  console.log($("#"+id).first()[0]);
   $("#"+id).first()[0].style.display = "block";
-
-
 }
 
 function setDisplayHidden(id){
-  // document.getElementById(id).style.display = "none";
-  console.log($("#"+id)[0]);
   $("#"+id).first()[0].style.display = "none";
-  // $("#" + id).style.display="none";
 }
 
 function addProfRating(rating, profName){
@@ -39,31 +32,37 @@ function getProfsAndCreateDivs(){
   $("div.full-descr.hidden-xs.show-for-print").each(function(index){
     let idstring = "schedurater" + id;
     let prof = this.children[1].innerText.trim().split(",");
-    for (let p = 0; p < prof.length; p++){
-      profs.add(prof[p]);
-      if (!(prof[p] in profsToDiv)){
-        profsToDiv[prof[p]] = [];
+    if (prof != ""){
+      console.log(prof);
+      for (let p = 0; p < prof.length; p++){
+        profs.add(prof[p]);
+        if (!(prof[p] in profsToDiv)){
+          profsToDiv[prof[p]] = [];
+        }
+        profsToDiv[prof[p]].push(idstring);
       }
-      profsToDiv[prof[p]].push(idstring);
+      if (prof.length > 0){
+        let newDiv = document.createElement("div");
+        newDiv.id = idstring;
+        newDiv.className = "profDiv";
+        newDiv.style.width = "inherit";
+        newDiv.style.height = "200px";
+        newDiv.style.background = "#3BB6B4";
+        newDiv.style.display = "none";
+        newDiv.style.zIndex = "10000";
+        newDiv.style.position = "absolute";
+        this.parentNode.parentNode.parentNode.parentNode.appendChild(newDiv);
+        this.addEventListener("mouseenter", () => {
+          setDisplayVisible(idstring);
+        },false);
+        this.addEventListener("mouseleave", () => {
+          setDisplayHidden(idstring);
+        },false);
+        id = id + 1;
+      }
     }
 
-    let newDiv = document.createElement("div");
-    newDiv.id = idstring;
-    newDiv.className = "profDiv";
-    newDiv.style.width = "200px";
-    newDiv.style.height = "200px";
-    newDiv.style.background = "#3BB6B4";
-    newDiv.style.display = "none";
-    newDiv.style.zIndex = "10000";
-    newDiv.style.position = "absolute";
-    this.appendChild(newDiv);
-    this.addEventListener("mouseenter", () => {
-      setDisplayVisible(idstring);
-    },false);
-    this.addEventListener("mouseleave", () => {
-      setDisplayHidden(idstring);
-    },false);
-    id = id + 1;
+
   });
 
   //
