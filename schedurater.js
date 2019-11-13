@@ -16,8 +16,22 @@ function setDisplayHidden(id){
 }
 
 function addProfRating(rating, profName){
+  console.log(rating);
+
+  var url =
+  "https://www.ratemyprofessors.com/search.jsp?queryoption=HEADER&queryBy=teacherName&schoolName=University+of+Michigan&schoolID=1258&query="+ profName.toString().trim().replace(" ", "+");
+
+  console.log(url);
   for (let i = 0; i < profsToDiv[profName].length; i++){
-    $("#"+profsToDiv[profName][i]).append("<b>" + profName + ":" + "</br>" + rating + "</br>");
+    let a = document.createElement('a');
+    a.href = url;
+    a.title = profName;
+    a.setAttribute('target','_blank');
+    a.style.textDecoration = "none";
+    $("#"+profsToDiv[profName][i]).append("<a href="+url+ " target=" +">" + profName + "</a>")
+    $("#"+profsToDiv[profName][i]).append(":" + "</br>" + rating + "</br>");
+    // $("#"+profsToDiv[profName][i]).append("<b>" + profName + ":" + "</br>" + rating + "</br>");
+
   }
 }
 
@@ -33,7 +47,6 @@ function getProfsAndCreateDivs(){
     let idstring = "schedurater" + id;
     let prof = this.children[1].innerText.trim().split(",");
     if (prof != ""){
-      console.log(prof);
       for (let p = 0; p < prof.length; p++){
         profs.add(prof[p]);
         if (!(prof[p] in profsToDiv)){
@@ -46,16 +59,20 @@ function getProfsAndCreateDivs(){
         newDiv.id = idstring;
         newDiv.className = "profDiv";
         newDiv.style.width = "inherit";
-        newDiv.style.height = "200px";
-        newDiv.style.background = "#3BB6B4";
+        newDiv.style.height = "auto";
+        // newDiv.style.background = "#3BB6B4";
+        newDiv.backgroundColor = this.parentNode.parentNode.parentNode.backgroundColor;
+        style = getComputedStyle(this.parentNode.parentNode.parentNode.children[0],null)
+        newDiv.style.backgroundColor = style.backgroundColor;
+        newDiv.style.backgroundImage = style.backgroundImage;
         newDiv.style.display = "none";
         newDiv.style.zIndex = "10000";
         newDiv.style.position = "absolute";
         this.parentNode.parentNode.parentNode.parentNode.appendChild(newDiv);
-        this.addEventListener("mouseenter", () => {
+        this.parentNode.parentNode.parentNode.parentNode.addEventListener("mouseenter", () => {
           setDisplayVisible(idstring);
         },false);
-        this.addEventListener("mouseleave", () => {
+        this.parentNode.parentNode.parentNode.parentNode.addEventListener("mouseleave", () => {
           setDisplayHidden(idstring);
         },false);
         id = id + 1;
