@@ -16,19 +16,17 @@ function setDisplayHidden(id){
 }
 
 function addProfRating(rating, profName){
-  console.log(rating);
 
   var url =
   "https://www.ratemyprofessors.com/search.jsp?queryoption=HEADER&queryBy=teacherName&schoolName=University+of+Michigan&schoolID=1258&query="+ profName.toString().trim().replace(" ", "+");
 
-  console.log(url);
   for (let i = 0; i < profsToDiv[profName].length; i++){
     let a = document.createElement('a');
     a.href = url;
     a.title = profName;
-    a.setAttribute('target','_blank');
+    a.target = "_blank";
     a.style.textDecoration = "none";
-    $("#"+profsToDiv[profName][i]).append("<a href="+url+ " target=" +">" + profName + "</a>")
+    $("#"+profsToDiv[profName][i]).append("<a href="+url+ " onclick=\'window.open(this.href);return false;\'>" + profName + "</a>")
     $("#"+profsToDiv[profName][i]).append(":" + "</br>" + rating + "</br>");
     // $("#"+profsToDiv[profName][i]).append("<b>" + profName + ":" + "</br>" + rating + "</br>");
 
@@ -68,6 +66,12 @@ function getProfsAndCreateDivs(){
         newDiv.style.display = "none";
         newDiv.style.zIndex = "10000";
         newDiv.style.position = "absolute";
+        this.addEventListener("click",function(event){
+          event.stopPropagation();
+        },false);
+        this.addEventListener("onclick",function(event){
+          event.stopPropagation();
+        },false);
         this.parentNode.parentNode.parentNode.parentNode.appendChild(newDiv);
         this.parentNode.parentNode.parentNode.parentNode.addEventListener("mouseenter", () => {
           setDisplayVisible(idstring);
