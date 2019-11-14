@@ -93,14 +93,28 @@ async function run(){
 
   let arr_profs = Array.from(profs);
   for (var p = 0; p < arr_profs.length; p++){
-    // For each professor, send the background script a request
-    // that will be forwarded to RMP
-    chrome.runtime.sendMessage(
-      {
-      contentScriptQuery: "queryRatings",
-      profName: arr_profs[p]
-      }
-    );
+    let profName = arr_profs[p];
+    // check local storage for this profs info
+    chrome.storage.local.get(profName, function(result) {
+          // weird way to check if we miss, but it works
+          if (Object.entries(result).length === 0 &&
+              result.constructor === Object)
+          {
+            // cache miss, make rmp request
+            console.log("cache miss for " + profName);
+            chrome.runtime.sendMessage(
+              {
+              contentScriptQuery: "queryRatings",
+              profName: profName
+              }
+            );
+          } else {
+            // cache hit, add that bitch
+            console.log("cache HIT for " + profName);
+            addProfRating(result[profName].grade, profName);
+          }
+    });
+
   }
 }
 

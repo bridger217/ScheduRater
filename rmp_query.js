@@ -13,7 +13,9 @@ function handleHttpErrors(response) {
 
 function cacheProfRating(profName, profRating) {
   // cache this professor's rating
-  chrome.storage.local.set({profName: profRating}, function() {
+  let cacheObj = {}
+  cacheObj[profName] = profRating;
+  chrome.storage.local.set(cacheObj, function() {
 
     if (chrome.runtime.lastError) {
       // cache is full (5MB), clear it i guess? idk, not tryna
