@@ -108,8 +108,12 @@ async function run(){
               profName: profName
               }
             );
+          } else if (result[profName] === "NOT_FOUND") {
+            // we know this prof does not have ratings
+            console.log("cache HIT for " + profName);
+            addProfRating("N/A", profName);
           } else {
-            // cache hit, add that bitch
+            // cache hit with valid info, add that bitch
             console.log("cache HIT for " + profName);
             addProfRating(result[profName].grade, profName);
           }

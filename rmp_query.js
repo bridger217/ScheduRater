@@ -37,6 +37,41 @@ function cacheProfRating(profName, profRating) {
   });
 }
 
+function cacheProfMiss(profName) {
+  let cacheObj = {};
+  cacheObj[profName] = "NOT_FOUND";
+
+  chrome.storage.local.set(cacheObj, function() {
+
+    if (chrome.runtime.lastError) {
+      // cache is full (5MB), clear it i guess? idk, not tryna
+      // implement an LRU eviction
+      console.log('cache full, clearing...');
+      chrome.storage.local.clear(function() {
+        var error = chrome.runtime.lastError;
+        if (error) {
+            console.error(error);
+        } else {
+          // retry this store
+          cacheProfMiss(profName);
+        }
+      });
+    } else {
+      // successful write
+      console.log('cached ' + profName);
+    }
+  });
+}
+
+// This will only be used when we have a cache miss on a professor
+// with no ratings available. Kinda sloppy but can refactor later.
+function sendUnavailableProf(profName) {
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    // TODO: send an object to the content script (same one used in cache)
+    chrome.tabs.sendMessage(tabs[0].id, {profRating: "N/A", profName: profName});
+  });
+}
+
 function handleRatingsResponse(ratingsPageHTML, profName) {
   var ratingsPageDOM = $($.parseHTML(ratingsPageHTML));
   var profRating = new Object();
@@ -67,6 +102,7 @@ function handleQueryResponse(searchPageHTML, profName) {
   var profListings = $("li.listing.PROFESSOR", searchPageDOM);
 
   if (profListings.length == 0) {
+    cacheProfMiss(profName);
     throw Error(profName + " not found.");
   }
 
@@ -82,16 +118,21 @@ function handleQueryResponse(searchPageHTML, profName) {
 chrome.runtime.onMessage.addListener(
   function(request) {
     if (request.contentScriptQuery == "queryRatings") {
+      let profName = request.profName;
       var url =
       `https://www.ratemyprofessors.com/search.jsp?queryoption=HEADER&queryBy=t
       eacherName&schoolName=University+of+Michigan&schoolID=1258&query=`
-      + request.profName.replaceAll(" ", "+");
+      + profName.replaceAll(" ", "+");
 
       fetch(url)
           .then(response => handleHttpErrors(response))
           .then(response => response.text())
           .then(text => handleQueryResponse(text, request.profName))
-          .catch(error => console.log(error))
+          .catch(function(error) {
+                  console.log(error);
+                  sendUnavailableProf(profName);
+                }
+           )
 
       return true;  // Will respond asynchronously.
     }
