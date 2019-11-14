@@ -11,11 +11,42 @@ function handleHttpErrors(response) {
     return response;
 }
 
+function cacheProfRating(profName, profRating) {
+  // cache this professor's rating
+  chrome.storage.local.set({profName: profRating}, function() {
+
+    if (chrome.runtime.lastError) {
+      // cache is full (5MB), clear it i guess? idk, not tryna
+      // implement an LRU eviction
+      console.log('cache full, clearing...');
+      chrome.storage.local.clear(function() {
+        var error = chrome.runtime.lastError;
+        if (error) {
+            console.error(error);
+        } else {
+          // retry this store
+          cacheProfRating(profName, profRating)
+        }
+      });
+    } else {
+      // successful write
+      console.log('cached ' + profName);
+    }
+  });
+}
+
 function handleRatingsResponse(ratingsPageHTML, profName) {
   var ratingsPageDOM = $($.parseHTML(ratingsPageHTML));
-  var rating = $(".grade", ratingsPageDOM).text().substring(0, 4);
+  var profRating = new Object();
+
+  // Parse each field of the html
+  profRating.grade = $(".grade", ratingsPageDOM).text().substring(0, 4);
+
+  cacheProfRating(profName, profRating)
+
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, {profRating: rating, profName: profName});
+    // TODO: send an object to the content script (same one used in cache)
+    chrome.tabs.sendMessage(tabs[0].id, {profRating: profRating.grade, profName: profName});
   });
 }
 

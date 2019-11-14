@@ -21,6 +21,7 @@
     "iframe.html"
   ],
   "permissions": [
+    "storage",
     "http://www.ratemyprofessors.com/",
     "https://www.ratemyprofessors.com/"
   ],
