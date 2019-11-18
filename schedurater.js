@@ -23,12 +23,12 @@ function addProfRating(rating, profName){
   for (let i = 0; i < profsToDiv[profName].length; i++){
     let a = document.createElement('a');
     a.href = url;
-    a.title = profName;
+    a.innerText = profName;
     a.target = "_blank";
+    a.style.color = "black";
     a.style.textDecoration = "none";
-    $("#"+profsToDiv[profName][i]).append("<a href="+url+ " onclick=\'window.open(this.href);return false;\'>" + profName + "</a>")
+    $("#"+profsToDiv[profName][i]).append(a);
     $("#"+profsToDiv[profName][i]).append(":" + "</br>" + rating + "</br>");
-    // $("#"+profsToDiv[profName][i]).append("<b>" + profName + ":" + "</br>" + rating + "</br>");
 
   }
 }
@@ -66,10 +66,10 @@ function getProfsAndCreateDivs(){
         newDiv.style.display = "none";
         newDiv.style.zIndex = "10000";
         newDiv.style.position = "absolute";
-        this.addEventListener("click",function(event){
+        newDiv.addEventListener("click",function(event){
           event.stopPropagation();
         },false);
-        this.addEventListener("onclick",function(event){
+        newDiv.addEventListener("onclick",function(event){
           event.stopPropagation();
         },false);
         this.parentNode.parentNode.parentNode.parentNode.appendChild(newDiv);
