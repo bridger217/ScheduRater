@@ -4,6 +4,43 @@ String.prototype.replaceAll = function(search, replacement) {
     return target.replace(new RegExp(search, 'g'), replacement);
 };
 
+function isDigit(n) {
+  return (
+    n === '0' || n === '1' || n === '2' || n === '3' ||
+    n === '4' || n === '5' || n === '6' || n === '7' ||
+    n === '8' || n === '9'
+  );
+}
+
+function isTakeAgainChar(n) {
+  return (isDigit(n) || n === '%');
+}
+
+function parseTakeAgain(takeAgainText) {
+  let ret = "";
+  for (let i = 0; i < takeAgainText.length; i++) {
+    if (isTakeAgainChar(takeAgainText[i])) {
+      ret += takeAgainText[i];
+    }
+  }
+  return ret;
+}
+
+function isDifficultyChar(n) {
+  return (isDigit(n) || n === '.');
+}
+
+function parseDifficulty(difficultyText) {
+  console.log("BITCH: " + difficultyText);
+  let ret = "";
+  for (let i = 0; i < difficultyText.length; i++) {
+    if (isDifficultyChar(difficultyText[i])) {
+      ret += difficultyText[i];
+    }
+  }
+  return ret;
+}
+
 function handleHttpErrors(response) {
     if (!response.ok) {
       throw Error(response.statusText);
@@ -77,12 +114,31 @@ function handleRatingsResponse(ratingsPageHTML, profName, url) {
   var profRating = new Object();
 
   // Parse each field of the html
+  
+  // grade
   profRating.grade = $(".grade", ratingsPageDOM).text().substring(0, 4);
+  // url
   profRating.url = url;
+  // top tags
   profRating.topTags = $(".tag-box-choosetags", ratingsPageDOM).map( function( i ) {
     if (i < 3) { return this.innerText.substring(1, this.innerText.length); }
     else { return null; }
   });
+  // take again %
+  let takeAgainText = $('[class^="breakdown-section takeAgain"]', ratingsPageDOM).text();
+  if (!takeAgainText.includes('%')) {
+    // no rating on website
+    profRating.takeAgain = "N/A";
+  } else {
+    profRating.takeAgain = parseTakeAgain(takeAgainText);
+  }
+  // level of difficulty
+  let difficultyText = $("div.breakdown-section.difficulty", ratingsPageDOM).text();
+  if (!difficultyText.includes('.')) {
+    profRating.difficulty = "N/A";
+  } else {
+    profRating.difficulty = parseDifficulty(difficultyText);
+  }
 
   cacheProfRating(profName, profRating)
 

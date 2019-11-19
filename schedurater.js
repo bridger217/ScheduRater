@@ -29,11 +29,18 @@ function addProfRating(rating, profName){
       $("#"+profsToDiv[profName][i]).append(":" + "</br>" + "N/A" + "</br>");
     }
     else {
+      // url
       a.href = rating.url;
+      // grade
       $("#"+profsToDiv[profName][i]).append(":" + "</br>" + rating.grade + "</br>");
+      // top tags
       for (let j = 0; j < rating.topTags.length; j++) {
         $("#"+profsToDiv[profName][i]).append("</br>" + rating.topTags[j] + "</br>");
       }
+      // take again score
+      $("#"+profsToDiv[profName][i]).append("</br>" + "Would take again: " + rating.takeAgain + "</br>");
+      // level of difficulty
+      $("#"+profsToDiv[profName][i]).append("</br>" + "Level of difficulty: " + rating.difficulty + "</br>");
     }
 
 
