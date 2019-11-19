@@ -31,11 +31,20 @@ function isDifficultyChar(n) {
 }
 
 function parseDifficulty(difficultyText) {
-  console.log("BITCH: " + difficultyText);
   let ret = "";
   for (let i = 0; i < difficultyText.length; i++) {
     if (isDifficultyChar(difficultyText[i])) {
       ret += difficultyText[i];
+    }
+  }
+  return ret;
+}
+
+function parseNumReviews(numReviewsText) {
+  let ret = "";
+  for (let i = 0; i < numReviewsText.length; i++) {
+    if (isDigit(numReviewsText[i])) {
+      ret += numReviewsText[i];
     }
   }
   return ret;
@@ -104,7 +113,6 @@ function cacheProfMiss(profName) {
 // with no ratings available. Kinda sloppy but can refactor later.
 function sendUnavailableProf(profName) {
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    // TODO: send an object to the content script (same one used in cache)
     chrome.tabs.sendMessage(tabs[0].id, {profRating: {}, profName: profName});
   });
 }
@@ -114,7 +122,7 @@ function handleRatingsResponse(ratingsPageHTML, profName, url) {
   var profRating = new Object();
 
   // Parse each field of the html
-  
+
   // grade
   profRating.grade = $(".grade", ratingsPageDOM).text().substring(0, 4);
   // url
@@ -139,6 +147,11 @@ function handleRatingsResponse(ratingsPageHTML, profName, url) {
   } else {
     profRating.difficulty = parseDifficulty(difficultyText);
   }
+  // num reviews
+  profRating.numReviews =
+    parseNumReviews(
+      $("div.table-toggle.rating-count.active", ratingsPageDOM).text()
+    );
 
   cacheProfRating(profName, profRating)
 
