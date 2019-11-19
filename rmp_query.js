@@ -72,12 +72,13 @@ function sendUnavailableProf(profName) {
   });
 }
 
-function handleRatingsResponse(ratingsPageHTML, profName) {
+function handleRatingsResponse(ratingsPageHTML, profName, url) {
   var ratingsPageDOM = $($.parseHTML(ratingsPageHTML));
   var profRating = new Object();
 
   // Parse each field of the html
   profRating.grade = $(".grade", ratingsPageDOM).text().substring(0, 4);
+  profRating.url = url;
 
   cacheProfRating(profName, profRating)
 
@@ -91,7 +92,7 @@ function searchForRatings(url, profName) {
   fetch(url)
     .then(response => handleHttpErrors(response))
     .then(response => response.text())
-    .then(text => handleRatingsResponse(text, profName))
+    .then(text => handleRatingsResponse(text, profName, url))
     .catch(error => console.log(error))
 
   return true;

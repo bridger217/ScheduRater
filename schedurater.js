@@ -17,23 +17,19 @@ function setDisplayHidden(id){
 
 function addProfRating(rating, profName){
 
-  var url =
-  "https://www.ratemyprofessors.com/search.jsp?queryoption=HEADER&queryBy=teacherName&schoolName=University+of+Michigan&schoolID=1258&query="+ profName.toString().trim().replace(" ", "+");
-
   for (let i = 0; i < profsToDiv[profName].length; i++){
     let a = document.createElement('a');
-    a.href = url;
     a.innerText = profName;
     a.target = "_blank";
     a.style.color = "black";
     a.style.textDecoration = "none";
     $("#"+profsToDiv[profName][i]).append(a);
-    if (Object.entries(rating).length === 0)
-    {
+    if (Object.entries(rating).length === 0) {
       $("#"+profsToDiv[profName][i]).append(":" + "</br>" + "N/A" + "</br>");
     }
     else {
       $("#"+profsToDiv[profName][i]).append(":" + "</br>" + rating.grade + "</br>");
+      a.href = rating.url;
     }
 
 
