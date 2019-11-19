@@ -16,6 +16,7 @@ function setDisplayHidden(id){
 }
 
 function addProfRating(rating, profName){
+  console.log(rating);
 
   for (let i = 0; i < profsToDiv[profName].length; i++){
     let a = document.createElement('a');
@@ -28,8 +29,11 @@ function addProfRating(rating, profName){
       $("#"+profsToDiv[profName][i]).append(":" + "</br>" + "N/A" + "</br>");
     }
     else {
-      $("#"+profsToDiv[profName][i]).append(":" + "</br>" + rating.grade + "</br>");
       a.href = rating.url;
+      $("#"+profsToDiv[profName][i]).append(":" + "</br>" + rating.grade + "</br>");
+      for (let j = 0; j < rating.topTags.length; j++) {
+        $("#"+profsToDiv[profName][i]).append("</br>" + rating.topTags[j] + "</br>");
+      }
     }
 
 

@@ -79,6 +79,10 @@ function handleRatingsResponse(ratingsPageHTML, profName, url) {
   // Parse each field of the html
   profRating.grade = $(".grade", ratingsPageDOM).text().substring(0, 4);
   profRating.url = url;
+  profRating.topTags = $(".tag-box-choosetags", ratingsPageDOM).map( function( i ) {
+    if (i < 3) { return this.innerText.substring(1, this.innerText.length); }
+    else { return null; }
+  });
 
   cacheProfRating(profName, profRating)
 
