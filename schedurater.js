@@ -28,7 +28,14 @@ function addProfRating(rating, profName){
     a.style.color = "black";
     a.style.textDecoration = "none";
     $("#"+profsToDiv[profName][i]).append(a);
-    $("#"+profsToDiv[profName][i]).append(":" + "</br>" + rating + "</br>");
+    if (Object.entries(rating).length === 0)
+    {
+      $("#"+profsToDiv[profName][i]).append(":" + "</br>" + "N/A" + "</br>");
+    }
+    else {
+      $("#"+profsToDiv[profName][i]).append(":" + "</br>" + rating.grade + "</br>");
+    }
+
 
   }
 }
@@ -111,11 +118,11 @@ async function run(){
           } else if (result[profName] === "NOT_FOUND") {
             // we know this prof does not have ratings
             console.log("cache HIT for " + profName);
-            addProfRating("N/A", profName);
+            addProfRating({}, profName);
           } else {
             // cache hit with valid info, add that bitch
             console.log("cache HIT for " + profName);
-            addProfRating(result[profName].grade, profName);
+            addProfRating(result[profName], profName);
           }
     });
 

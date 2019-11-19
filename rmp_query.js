@@ -68,7 +68,7 @@ function cacheProfMiss(profName) {
 function sendUnavailableProf(profName) {
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     // TODO: send an object to the content script (same one used in cache)
-    chrome.tabs.sendMessage(tabs[0].id, {profRating: "N/A", profName: profName});
+    chrome.tabs.sendMessage(tabs[0].id, {profRating: {}, profName: profName});
   });
 }
 
@@ -83,7 +83,7 @@ function handleRatingsResponse(ratingsPageHTML, profName) {
 
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     // TODO: send an object to the content script (same one used in cache)
-    chrome.tabs.sendMessage(tabs[0].id, {profRating: profRating.grade, profName: profName});
+    chrome.tabs.sendMessage(tabs[0].id, {profRating: profRating, profName: profName});
   });
 }
 
