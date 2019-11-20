@@ -21,27 +21,35 @@ function addProfRating(rating, profName){
     let a = document.createElement('a');
     a.innerText = profName;
     a.target = "_blank";
-    a.style.color = "black";
-    a.style.textDecoration = "none";
-    $("#"+profsToDiv[profName][i]).append(a);
+    a.style.color = "white";
+    a.style.fontSize = "medium"
+    a.style.fontWeight = "bold"
+    a.style.display = "block"
+    a.style.textAlign = "left";
+    a.style.overflow = "scroll";
+    $("#"+profsToDiv[profName][i]).append(a).css({"text-align": "left", "color": "white", "padding-left": "5px"});
     if (Object.entries(rating).length === 0) {
-      $("#"+profsToDiv[profName][i]).append(":" + "</br>" + "N/A" + "</br>");
+      $("#"+profsToDiv[profName][i]).append("Professor rating not found." + "</br>");
     }
     else {
       // url
       a.href = rating.url;
       // grade
-      $("#"+profsToDiv[profName][i]).append(":" + "</br>" + rating.grade + "</br>");
-      // num reviews
-      $("#"+profsToDiv[profName][i]).append("Num reviews: " + "</br>" + rating.numReviews + "</br>");
-      // top tags
-      for (let j = 0; j < rating.topTags.length; j++) {
-        $("#"+profsToDiv[profName][i]).append("</br>" + rating.topTags[j] + "</br>");
-      }
+      $("#"+profsToDiv[profName][i]).append("Overall: "  + rating.grade + "</br>" );
       // take again score
-      $("#"+profsToDiv[profName][i]).append("</br>" + "Would take again: " + rating.takeAgain + "</br>");
+      $("#"+profsToDiv[profName][i]).append("Would take again: " + rating.takeAgain + "</br>");
       // level of difficulty
-      $("#"+profsToDiv[profName][i]).append("</br>" + "Level of difficulty: " + rating.difficulty + "</br>");
+      $("#"+profsToDiv[profName][i]).append("Level of difficulty: " + rating.difficulty + "</br>");
+      // num reviews
+      $("#"+profsToDiv[profName][i]).append("Num reviews: " + rating.numReviews + "</br>");
+      // top tags
+      $("#"+profsToDiv[profName][i]).append("Top tags: " + "</br>");
+      var tags = "<ul style=\"text-indent:-20px\">"
+      for (let j = 0; j < rating.topTags.length; j++) {
+        tags += "<li>" + rating.topTags[j] + "</li>"
+      }
+      tags += "</ul>"
+      $("#"+profsToDiv[profName][i]).append(tags);
     }
 
 
@@ -72,12 +80,14 @@ function getProfsAndCreateDivs(){
         newDiv.id = idstring;
         newDiv.className = "profDiv";
         newDiv.style.width = "inherit";
-        newDiv.style.height = "auto";
+        newDiv.style.height = "100px";
+        newDiv.style.overflow = "auto"
         // newDiv.style.background = "#3BB6B4";
         newDiv.backgroundColor = this.parentNode.parentNode.parentNode.backgroundColor;
         style = getComputedStyle(this.parentNode.parentNode.parentNode.children[0],null)
         newDiv.style.backgroundColor = style.backgroundColor;
         newDiv.style.backgroundImage = style.backgroundImage;
+        newDiv.style.backgroundSize = style.backgroundSize;
         newDiv.style.display = "none";
         newDiv.style.zIndex = "10000";
         newDiv.style.position = "absolute";
