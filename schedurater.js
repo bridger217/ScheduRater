@@ -105,7 +105,7 @@ function initDivs(){
       let commonTags = document.createElement('p');
       commonTags.className = "commonTags"
       commonTags.innerText = "COMMON TAGS:"
-      $('#'+this.id).append(commonTags);
+      this.append(commonTags);
 
 
       if (!jQuery.isEmptyObject(rating.tags)){
@@ -113,7 +113,7 @@ function initDivs(){
           let tagPair = document.createElement('p');
           tagPair.id = this.id + "tagPair"
           tagPair.className = "tagPair"
-          $('#'+this.id).append(tagPair);
+          this.append(tagPair);
 
           let tagWord = document.createElement('p');
           tagWord.className = "tagWord"
@@ -133,11 +133,11 @@ function initDivs(){
       let reviewCount = document.createElement('p');
       reviewCount.className = "reviewCount"
       reviewCount.innerText = "FROM " + rating.numReviews + " REVIEWS"
-      $('#'+this.id).append(reviewCount);
+      this.append(reviewCount);
 
 
     }
-    this.append($('<img>',{id:'theImg',src:url}));
+    $("#"+this.id).append($('<img>',{id:'theImg',src:url}));
 
   });
 }
@@ -181,8 +181,6 @@ function getProfsAndCreateDivs(){
            html_str += "</select>";
            newDiv.innerHTML += html_str;
         }
-
-
         newDiv.addEventListener("click",function(event){
           event.stopPropagation();
         },false);
@@ -198,11 +196,8 @@ function getProfsAndCreateDivs(){
         },false);
         idToProfs[idstring] = prof;
         id = id + 1;
-
       }
     }
-
-
   });
 
   return profs;
