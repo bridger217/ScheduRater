@@ -22,10 +22,46 @@ function addProfRating(rating, profName){
 }
 
 function changeProf(profNum, parentDiv){
-  console.log(parentDiv);
-  console.log(idToProfs[parentDiv.id]);
-  console.log(profNum);
+  let rating  = profRating[idToProfs[parentDiv.id][profNum]];
   $("#"+parentDiv.id).children(".name")[0].innerText = idToProfs[parentDiv.id][profNum];
+  $("#"+parentDiv.id).children(".name")[0].href = rating.url;
+
+  $("#"+parentDiv.id).children(".overall").children(".score")[0].innerText = rating.grade;
+  $("#"+parentDiv.id).children(".difficulty").children(".difScore")[0].innerText = rating.difficulty;
+
+  $("#"+parentDiv.id).children(".takeAgain").children(".percent")[0].innerText = rating.takeAgain;
+
+  $("#"+parentDiv.id).children(".tagPair").remove();
+
+  console.log(rating.tags);
+  if (!jQuery.isEmptyObject(rating.tags)){
+    for (let j  = 0; j < rating.tags.length; j++) {
+      console.log("mitch");
+      let tagPair = document.createElement('p');
+      tagPair.id = parentDiv.id + "tagPair"
+      tagPair.className = "tagPair"
+      $("#"+parentDiv.id).append(tagPair);
+
+      let tagWord = document.createElement('p');
+      tagWord.className = "tagWord"
+      tagWord.innerText = rating.tags[j].tagText;
+      $('#' + parentDiv.id + "tagPair").append(tagWord);
+
+      let tagCount = document.createElement('p');
+      tagCount.className = "tagCount"
+      tagCount.innerText = rating.tags[j].tagNum;
+      $('#' + parentDiv.id + "tagPair").append(tagCount);
+      $('#' + parentDiv.id + "tagPair").append("</br>");
+
+    }
+  }
+
+  $("#"+parentDiv.id).children(".reviewCount").remove();
+
+  let reviewCount = document.createElement('p');
+      reviewCount.className = "reviewCount"
+      reviewCount.innerText = "FROM " + rating.numReviews + " REVIEWS"
+      $("#"+parentDiv.id).append(reviewCount);
 }
 
 function initSelectors(){
