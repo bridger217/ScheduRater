@@ -22,7 +22,7 @@
     }
   ],
   "web_accessible_resources":[
-    "iframe.html"
+    "images/star.png"
   ],
   "permissions": [
     "storage",

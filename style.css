@@ -1,6 +1,48 @@
 .profDiv{
   width: inherit;
-  height: 100px;
+  height: 150px;
   overflow: auto;
+  position: relative;
+  border-left: 4px solid;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+
+}
+
+.name{
+  text-align: center;
+  color: white;
+  font-size: 14px;
+  display: block;
+}
+
+.score{
+  text-align: center;
+  color: white;
+  font-weight: bolder;
+  font-size: 20px;
+  display: block;
+}
+
+.text{
+  text-align: center;
+  color: white;
+  font-size: 14px;
+  display: block;
+}
+
+
+.profDiv img{
+  width: 32px;
+  height: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  justify-content: center;
+  bottom: 10px;
+  left: 0;
+  right: 0;
 
 }
