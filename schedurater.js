@@ -1,8 +1,9 @@
 //schedurater.js
 // jalgrana-mitchhub-elbridge
-
+let num_ratings = 0;
 let profsToDiv = {};
-
+let profRating = {};
+let idToProfs = {};
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -16,93 +17,215 @@ function setDisplayHidden(id){
 }
 
 function addProfRating(rating, profName){
+  num_ratings++;
+  profRating[profName] = rating;
+}
 
+function changeProf(profNum, parentDiv){
+  console.log(parentDiv);
+  console.log(idToProfs[parentDiv.id]);
+  console.log(profNum);
+  $("#"+parentDiv.id).children(".name")[0].innerText = idToProfs[parentDiv.id][profNum];
+}
+
+function initSelectors(){
+  $(".selector").change(function(){
+    changeProf($(this).val(), this.parentNode);
+  });
+}
+
+function initDivs(){
   var url = chrome.runtime.getURL("images/star.png");
+  $(".profDiv").each(function(){
+    let profName = idToProfs[this.id][0];
+    let rating = profRating[profName];
+    let name = document.createElement('a');
+    name.className = "name";
+    name.innerText = profName;
+    this.append(name);
+    // $("#"+profsToDiv[profName][0]).append(name);
+    if (Object.entries(rating).length === 0) {
+      // $("#"+profsToDiv[profName][0]).append("Professor rating not found." + "</br>");
+      this.append("Professor rating not found." + "</br>");
+    }
+    else {
+      // url
+      name.href = rating.url;
+      name.target = "_blank"
+      // grade
+
+      let overall = document.createElement('p');
+      overall.id = this.id + "overall"
+      overall.className = "overall"
+      this.append(overall);
+
+      let score = document.createElement('p');
+      score.className = "score"
+      score.innerText = rating.grade;
+      $("#"+ this.id + "overall").append(score);
+
+      let overallText = document.createElement('p');
+      overallText.className = "overallText";
+      overallText.innerText = "OVERALL";
+      $("#"+ this.id + "overall").append(overallText);
 
 
-  console.log(profsToDiv);
-  if (!jQuery.isEmptyObject(profsToDiv)){
-    for (let i = 0; i < profsToDiv[profName].length; i++){
-      let name = document.createElement('a');
-      name.className = "name"
-      name.innerText = profName;
-      // a.target = "_blank";
-      // a.style.color = "black";
-      // a.style.fontSize = "14px"
-      // a.style.display = "block"
-      // a.style.textAlign = "left";
-      // a.style.overflow = "scroll";
+      let difficulty = document.createElement('p');
+      difficulty.id = this.id + "difficulty"
+      difficulty.className = "difficulty"
+      this.append(difficulty);
 
-      $("#"+profsToDiv[profName][i]).append(name);
-      if (Object.entries(rating).length === 0) {
-        $("#"+profsToDiv[profName][i]).append("Professor rating not found." + "</br>");
+      let difScore = document.createElement('p');
+      difScore.className = "difScore"
+      difScore.innerText = rating.difficulty;
+      $("#"+ this.id + "difficulty").append(difScore);
+
+      let difText = document.createElement('p');
+      difText.className = "difText";
+      difText.innerText = "DIFFICULTY";
+      $("#"+ this.id + "difficulty").append(difText);
+
+      let takeAgain = document.createElement('p');
+      takeAgain.id = this.id + "takeAgain"
+      takeAgain.className = "takeAgain"
+      this.append(takeAgain);
+
+      let percent = document.createElement('p');
+      percent.className = "percent"
+      percent.innerText = rating.takeAgain;
+      $("#"+ this.id + "takeAgain").append(percent);
+
+      let takeAgainText = document.createElement('p');
+      takeAgainText.className = "takeAgainText";
+      takeAgainText.innerText = "WOULD TAKE AGAIN";
+      $("#"+this.id + "takeAgain").append(takeAgainText);
+
+
+
+      let commonTags = document.createElement('p');
+      commonTags.className = "commonTags"
+      commonTags.innerText = "COMMON TAGS:"
+      $('#'+this.id).append(commonTags);
+
+
+      if (!jQuery.isEmptyObject(rating.tags)){
+        for (let j  = 0; j < rating.tags.length; j++) {
+          let tagPair = document.createElement('p');
+          tagPair.id = this.id + "tagPair"
+          tagPair.className = "tagPair"
+          $('#'+this.id).append(tagPair);
+
+          let tagWord = document.createElement('p');
+          tagWord.className = "tagWord"
+          tagWord.innerText = rating.tags[j].tagText;
+          $('#' + this.id + "tagPair").append(tagWord);
+
+          let tagCount = document.createElement('p');
+          tagCount.className = "tagCount"
+          tagCount.innerText = rating.tags[j].tagNum;
+          $('#' + this.id + "tagPair").append(tagCount);
+          $('#' + this.id + "tagPair").append("</br>");
+
+        }
       }
-      else {
-        // url
-        name.href = rating.url;
-        name.target = "_blank"
-        // grade
-        let score = document.createElement('p');
-        score.className = "score"
-
-        score.innerText = rating.grade;
-        $("#"+profsToDiv[profName][i]).append(score);
-        // take again score
-        // level of difficulty
-
-        let text = document.createElement('p');
-        text.className = "text"
-        text.innerText = "Num reviews: " + rating.numReviews + "\n" + "Would take again: " + rating.takeAgain + "\n" + "Level of difficulty: " + rating.difficulty + "\n"
-        $("#"+profsToDiv[profName][i]).append(text);
-        // top tags
-
-        let aa = document.createElement('p');
-        aa.id = profsToDiv[profName][i] + "abc"
-        aa.className = "pp"
-        $('#'+profsToDiv[profName][i]).append(aa);
-
-        let des = document.createElement('p');
-        des.className = "des"
-        des.innerText = "Energetic"
-        $('#' + profsToDiv[profName][i] + "abc").append(des);
-
-        let count = document.createElement('p');
-        count.className = "count"
-        count.innerText = "6"
-        $('#' + profsToDiv[profName][i] + "abc").append(count);
-        $('#' + profsToDiv[profName][i] + "abc").append("</br>");
-
-        des = document.createElement('p');
-        des.className = "des"
-        des.innerText = "Lots of Homework"
-        $('#' + profsToDiv[profName][i] + "abc").append(des);
-
-        count = document.createElement('p');
-        count.className = "count"
-        count.innerText = "3"
-        $('#' + profsToDiv[profName][i] + "abc").append(count);
-        $('#' + profsToDiv[profName][i] + "abc").append("</br>");
-
-        des = document.createElement('p');
-        des.className = "des"
-        des.innerText = "Caring"
-        $('#' + profsToDiv[profName][i] + "abc").append(des);
-
-        count = document.createElement('p');
-        count.className = "count"
-        count.innerText = "1"
-        $('#' + profsToDiv[profName][i] + "abc").append(count);
-        $('#' + profsToDiv[profName][i] + "abc").append("</br>");
 
 
+      let reviewCount = document.createElement('p');
+      reviewCount.className = "reviewCount"
+      reviewCount.innerText = "FROM " + rating.numReviews + " REVIEWS"
+      $('#'+this.id).append(reviewCount);
 
-
-      }
-      $('#'+profsToDiv[profName][i]).append($('<img>',{id:'theImg',src:url}));
 
     }
-  }
+    this.append($('<img>',{id:'theImg',src:url}));
+
+  });
 }
+
+
+
+// function initDivs(){
+  // var url = chrome.runtime.getURL("images/star.png");
+//   console.log(profsToDiv);
+//   for (let i = 0; i < profsToDiv[profName].length; i++){
+
+//   }
+//   if (!jQuery.isEmptyObject(profsToDiv)){
+//       let name = document.createElement('a');
+//       name.className = "name"
+//       name.innerText = profName;
+//       // a.target = "_blank";
+//       // a.style.color = "black";
+//       // a.style.fontSize = "14px"
+//       // a.style.display = "block"
+//       // a.style.textAlign = "left";
+//       // a.style.overflow = "scroll";
+
+//       $("#"+profsToDiv[profName][0]).append(name);
+//       if (Object.entries(rating).length === 0) {
+//         $("#"+profsToDiv[profName][0]).append("Professor rating not found." + "</br>");
+//       }
+//       else {
+//         // url
+//         name.href = rating.url;
+//         name.target = "_blank"
+//         // grade
+//         let score = document.createElement('p');
+//         score.className = "score"
+
+//         score.innerText = rating.grade;
+//         $("#"+profsToDiv[profName][0]).append(score);
+//         // take again score
+//         // level of difficulty
+
+//         let text = document.createElement('p');
+//         text.className = "text"
+//         text.innerText = "Num reviews: " + rating.numReviews + "\n" + "Would take again: " + rating.takeAgain + "\n" + "Level of difficulty: " + rating.difficulty + "\n"
+//         $("#"+profsToDiv[profName][0]).append(text);
+//         // top tags
+
+//         let aa = document.createElement('p');
+//         aa.id = profsToDiv[profName][0] + "abc"
+//         aa.className = "pp"
+//         $('#'+profsToDiv[profName][0]).append(aa);
+
+//         let des = document.createElement('p');
+//         des.className = "des"
+//         des.innerText = "Energetic"
+//         $('#' + profsToDiv[profName][0] + "abc").append(des);
+
+//         let count = document.createElement('p');
+//         count.className = "count"
+//         count.innerText = "6"
+//         $('#' + profsToDiv[profName][0] + "abc").append(count);
+//         $('#' + profsToDiv[profName][0] + "abc").append("</br>");
+
+//         des = document.createElement('p');
+//         des.className = "des"
+//         des.innerText = "Lots of Homework"
+//         $('#' + profsToDiv[profName][0] + "abc").append(des);
+
+//         count = document.createElement('p');
+//         count.className = "count"
+//         count.innerText = "3"
+//         $('#' + profsToDiv[profName][0] + "abc").append(count);
+//         $('#' + profsToDiv[profName][0] + "abc").append("</br>");
+
+//         des = document.createElement('p');
+//         des.className = "des"
+//         des.innerText = "Caring"
+//         $('#' + profsToDiv[profName][0] + "abc").append(des);
+
+//         count = document.createElement('p');
+//         count.className = "count"
+//         count.innerText = "1"
+//         $('#' + profsToDiv[profName][0] + "abc").append(count);
+//         $('#' + profsToDiv[profName][0] + "abc").append("</br>");
+//       }
+//       $('#'+profsToDiv[profName][0]).append($('<img>',{id:'theImg',src:url}));
+//    }
+// }
+
 
 function clean(){
   profsToDiv = {};
@@ -127,20 +250,24 @@ function getProfsAndCreateDivs(){
         let newDiv = document.createElement("div");
         newDiv.id = idstring;
         newDiv.className = "profDiv";
-
-        // newDiv.style.width = "inherit";
-        // newDiv.style.height = "100px";
-        // newDiv.style.overflow = "auto"
-        // newDiv.style.background = "#3BB6B4";
         newDiv.backgroundColor = this.parentNode.parentNode.parentNode.backgroundColor;
         style = getComputedStyle(this.parentNode.parentNode.parentNode.children[0],null)
         newDiv.style.backgroundColor = "#5A5A5A";
         newDiv.style.borderColor = style.backgroundColor;
-      //newDiv.style.backgroundImage = style.backgroundImage;
-        //newDiv.style.backgroundSize = style.backgroundSize;
         newDiv.style.display = "none";
         newDiv.style.zIndex = "10000";
         newDiv.style.position = "absolute";
+
+        if (prof.length > 1){
+          let html_str = "<select class=\"selector\">";
+          for (let p = 0; p < prof.length; p++){
+            html_str += "<option value=" + p + ">" + prof[p] + "</option>";
+           }
+           html_str += "</select>";
+           newDiv.innerHTML += html_str;
+        }
+
+
         newDiv.addEventListener("click",function(event){
           event.stopPropagation();
         },false);
@@ -154,18 +281,21 @@ function getProfsAndCreateDivs(){
         this.parentNode.parentNode.parentNode.parentNode.addEventListener("mouseleave", () => {
           setDisplayHidden(idstring);
         },false);
+        idToProfs[idstring] = prof;
         id = id + 1;
+
       }
     }
 
 
   });
+
   return profs;
 }
 
 async function run(){
+  num_ratings = 0;
   let profs = getProfsAndCreateDivs();
-
   let arr_profs = Array.from(profs);
   for (var p = 0; p < arr_profs.length; p++){
     let profName = arr_profs[p];
@@ -193,8 +323,13 @@ async function run(){
             addProfRating(result[profName], profName);
           }
     });
-
   }
+  while (num_ratings < arr_profs.length){
+    await sleep(200);
+  }
+  initDivs();
+  initSelectors();
+
 }
 
 // Listen for the content script to make a rmp request
