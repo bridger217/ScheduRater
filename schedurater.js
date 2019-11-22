@@ -52,9 +52,50 @@ function addProfRating(rating, profName){
 
         let text = document.createElement('p');
         text.className = "text"
-        text.innerText = "Would take again: " + rating.takeAgain + "\n" + "Level of difficulty: " + rating.difficulty + "\n"
+        text.innerText = "Num reviews: " + rating.numReviews + "\n" + "Would take again: " + rating.takeAgain + "\n" + "Level of difficulty: " + rating.difficulty + "\n"
         $("#"+profsToDiv[profName][i]).append(text);
         // top tags
+
+        let aa = document.createElement('p');
+        aa.id = profsToDiv[profName][i] + "abc"
+        aa.className = "pp"
+        $('#'+profsToDiv[profName][i]).append(aa);
+
+        let des = document.createElement('p');
+        des.className = "des"
+        des.innerText = "Energetic"
+        $('#' + profsToDiv[profName][i] + "abc").append(des);
+
+        let count = document.createElement('p');
+        count.className = "count"
+        count.innerText = "6"
+        $('#' + profsToDiv[profName][i] + "abc").append(count);
+        $('#' + profsToDiv[profName][i] + "abc").append("</br>");
+
+        des = document.createElement('p');
+        des.className = "des"
+        des.innerText = "Lots of Homework"
+        $('#' + profsToDiv[profName][i] + "abc").append(des);
+
+        count = document.createElement('p');
+        count.className = "count"
+        count.innerText = "3"
+        $('#' + profsToDiv[profName][i] + "abc").append(count);
+        $('#' + profsToDiv[profName][i] + "abc").append("</br>");
+
+        des = document.createElement('p');
+        des.className = "des"
+        des.innerText = "Caring"
+        $('#' + profsToDiv[profName][i] + "abc").append(des);
+
+        count = document.createElement('p');
+        count.className = "count"
+        count.innerText = "1"
+        $('#' + profsToDiv[profName][i] + "abc").append(count);
+        $('#' + profsToDiv[profName][i] + "abc").append("</br>");
+
+
+
 
       }
       $('#'+profsToDiv[profName][i]).append($('<img>',{id:'theImg',src:url}));
