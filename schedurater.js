@@ -55,6 +55,7 @@ function addProfRating(rating, profName){
         text.innerText = "Num reviews: " + rating.numReviews + "\n" + "Would take again: " + rating.takeAgain + "\n" + "Level of difficulty: " + rating.difficulty + "\n"
         $("#"+profsToDiv[profName][i]).append(text);
         // top tags
+        // rating.tags is an array w/ rating.tags[i].tagText and rating.tags[i].tagNum
 
         let aa = document.createElement('p');
         aa.id = profsToDiv[profName][i] + "abc"

@@ -128,10 +128,38 @@ function handleRatingsResponse(ratingsPageHTML, profName, url) {
   // url
   profRating.url = url;
   // top tags
-  profRating.topTags = $(".tag-box-choosetags", ratingsPageDOM).map( function( i ) {
+  profRating.tags = new Array();
+  var tagsArr = $(".tag-box-choosetags", ratingsPageDOM).map( function( i ) {
     if (i < 3) { return this.innerText.substring(1, this.innerText.length); }
     else { return null; }
   });
+  for (let i = 0; i < tagsArr.length; i++) {
+    let tagStr = "";
+    let tagNum = "";
+    let parenIdx;
+    // parse the tag num. kinda sketchy
+    for (let j = 1; j < tagsArr[i].length; j++) {
+      if (tagsArr[i][j] == '(') {
+        parenIdx = j;
+        j++;
+
+
+        while (tagsArr[i][j] != ')') {
+          tagNum += tagsArr[i][j++];
+        }
+
+        tagStr = tagsArr[i].substring(0, parenIdx-1);
+
+        let tagObj = new Object();
+        tagObj.tagText = tagStr;
+        tagObj.tagNum = tagNum;
+        profRating.tags.push(tagObj);
+
+        break;
+      }
+    }
+  }
+  console.log(profRating);
   // take again %
   let takeAgainText = $('[class^="breakdown-section takeAgain"]', ratingsPageDOM).text();
   if (!takeAgainText.includes('%')) {
